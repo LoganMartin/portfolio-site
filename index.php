@@ -26,8 +26,10 @@
         <!-- Logo -->
         <div id="logo">
             <span class="image avatar64"><img src="images/avatar_med.png" alt="" /></span>
-            <h1 id="title">Logan Martin</h1>
-            <p>Software Developer</p>
+            <div id="logo-title">
+                <h1 id="title">Logan Martin</h1>
+                <p>Software Developer</p>
+            </div>
         </div>
 
         <!-- Nav -->

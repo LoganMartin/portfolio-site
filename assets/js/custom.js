@@ -16,6 +16,17 @@ $(".carousel").carousel({
     interval: false
 });
 
+//Find the element type of our active slide and if it's a video, play it
+$(".carousel").on('slid.bs.carousel', function () {
+
+  var activeItem = $(".item.active").children().first().children().first();
+  if(activeItem.is("video")) {
+
+      console.log(activeItem);
+      activeItem.get(0).play();
+  }
+})
+
 
 // Open a project when it's clicked, unless the external link is clicked.
 $(".work-item").click(function(event) {
@@ -70,12 +81,16 @@ function updateCarousel(imgString, imgPath) {
     for(var i=0; i<images.length; i++) {
         imageCount++;
         if(imageCount == 1) {
+            createCarouselItemByType(imgPath, images[i]);
             carIndicators += '<li data-target="#image-carousel" data-slide-to="'+ i +'" class="active"></li>';
-            carItems += '<div class="item active"><a href="'+ imgPath + images[i] +'" target="_blank"><img src="'+ imgPath + images[i] +'" alt="pic'+imageCount+'"></a></div>';
+            carItems += '<div class="item active"><a href="'+ imgPath + images[i] +'" target="_blank">'
+                        +createCarouselItemByType(imgPath, images[i])+'</a></div>';
         }
         else {
+            createCarouselItemByType(imgPath, images[i]);
             carIndicators += '<li data-target="#image-carousel" data-slide-to="'+ i +'"></li>';
-            carItems += '<div class="item"><a href="'+ imgPath + images[i] +'" target="_blank"><img src="'+ imgPath + images[i] +'" alt="pic'+imageCount+'"></a></div>';
+            carItems += '<div class="item"><a href="'+ imgPath + images[i] +'" target="_blank">'
+                        +createCarouselItemByType(imgPath, images[i])+'</a></div>';
         }
     }
     $("#carousel-indicators").html(carIndicators);
@@ -166,4 +181,21 @@ function displayAlert(alertString, alertType) {
     alertDOM += '<div id="alert-msg">' + alertString + '</div></div>';
 
     $("#alert-container").html(alertDOM);
+}
+
+function createCarouselItemByType(filePath, fileName) {
+
+    //Get characters after last '.' in our fileName to determine file type.
+    var fileType = fileName.split('.').pop();
+
+    //Generate Carousel Item DOM based on file type.
+    if(fileType == "mp4" || fileType == "webm") {
+        var carouselItem = '<video loop>';
+        carouselItem += '<source src="'+ filePath + fileName +'" type="video/'+fileType+'">'
+                        +'Your browser does not support the video tag.</video>';
+    }
+    else {
+        var carouselItem = '<img src="'+ filePath + fileName +'">';
+    }
+    return carouselItem;
 }
